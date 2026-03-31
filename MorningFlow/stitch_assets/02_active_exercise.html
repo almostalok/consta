@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MorningFlow - Active Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#3a3c3c",
+                        "secondary": "#c7c6c6",
+                        "secondary-fixed-dim": "#ababab",
+                        "on-tertiary-fixed-variant": "#e2e2e2",
+                        "primary-fixed": "#5d5f5f",
+                        "on-primary-container": "#000000",
+                        "on-surface-variant": "#c6c6c6",
+                        "outline-variant": "#474747",
+                        "outline": "#919191",
+                        "surface-dim": "#131313",
+                        "error": "#ffb4ab",
+                        "primary": "#ffffff",
+                        "primary-fixed-dim": "#454747",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-primary": "#5d5f5f",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-bright": "#393939",
+                        "on-background": "#e2e2e2",
+                        "on-primary-fixed-variant": "#e2e2e2",
+                        "on-error": "#690005",
+                        "on-primary": "#1a1c1c",
+                        "on-surface": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "primary-container": "#d4d4d4",
+                        "error-container": "#93000a",
+                        "surface-variant": "#353535",
+                        "on-secondary-container": "#e3e2e2",
+                        "inverse-on-surface": "#303030",
+                        "on-primary-fixed": "#ffffff",
+                        "on-tertiary": "#1b1b1b",
+                        "tertiary-fixed-dim": "#474747",
+                        "surface-container": "#1f1f1f",
+                        "secondary-container": "#464747",
+                        "surface-tint": "#c6c6c7",
+                        "on-secondary": "#1a1c1c",
+                        "tertiary-container": "#919191",
+                        "secondary-fixed": "#c7c6c6",
+                        "on-tertiary-container": "#000000",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-fixed": "#5e5e5e",
+                        "on-tertiary-fixed": "#ffffff",
+                        "surface-container-low": "#1b1b1b",
+                        "tertiary": "#e2e2e2"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .timer-ring {
+            transform: rotate(-90deg);
+        }
+        .glass-blur {
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar Segment -->
+<header class="fixed top-0 w-full z-50 bg-[#131313] dark:bg-[#131313] flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/20">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="Close up portrait of a young woman with a focused expression, soft cinematic lighting, monochromatic black and white photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRmUNeYAq3VaoFCtI4uML3ICl9eV3KzjRlVyI-fzoirIB2USX-fIpza9aFaJ_swBf8JEkSYzHq6T66jlOLdjLfY5kBh8qWEEthFs58lLy1VsijKkrOf3FAPjI3Jh4lUZOQWaOaFhbeQQc5cGt7y28MzKDbdIrzVjxXTBONHX3F5kwoIq7cqsEU3BKhiNR5qHKMGq2nr64n6F1mHdJ5WSKJHN8oL0Cni0jzelmOmvvWXH7bD5Sv2-gKirya3wr3wBqMZjImmN6NslQ"/>
+</div>
+<h1 class="font-headline font-bold tracking-tight text-xl text-white">MorningFlow</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-white hover:text-white transition-colors duration-300 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<main class="min-h-screen pt-24 pb-32 px-6 flex flex-col items-center justify-between">
+<!-- Active Exercise Identity -->
+<div class="w-full text-center space-y-2 mb-8">
+<p class="font-label text-on-surface-variant tracking-[0.2em] uppercase text-[10px]">Current Circuit</p>
+<h2 class="font-headline text-3xl font-extrabold text-primary tracking-tighter">Diamond Push-ups</h2>
+<div class="flex justify-center items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+<p class="text-on-surface-variant font-medium">Set 3 of 4</p>
+</div>
+</div>
+<!-- Central Massive Timer -->
+<div class="relative flex items-center justify-center w-full max-w-[320px] aspect-square">
+<!-- Progress Ring -->
+<svg class="absolute inset-0 w-full h-full timer-ring" viewbox="0 0 100 100">
+<circle class="text-surface-container-highest" cx="50" cy="50" fill="transparent" r="48" stroke="currentColor" stroke-width="0.5"></circle>
+<circle class="text-primary" cx="50" cy="50" fill="transparent" r="48" stroke="currentColor" stroke-dasharray="301.59" stroke-dashoffset="75" stroke-linecap="round" stroke-width="2.5"></circle>
+</svg>
+<!-- Timer Text -->
+<div class="text-center z-10">
+<div class="font-headline text-8xl font-black text-white tracking-tighter tabular-nums">
+                    00:42
+                </div>
+<div class="font-label text-on-surface-variant tracking-[0.15em] uppercase text-xs mt-2">
+                    Seconds remaining
+                </div>
+</div>
+<!-- Subtle Atmospheric Glow -->
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-[60px] -z-10"></div>
+</div>
+<!-- Next Up Queue Section -->
+<div class="w-full max-w-md mt-12 space-y-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-headline text-sm font-bold text-white">UP NEXT</h3>
+<span class="text-[10px] font-label text-on-surface-variant tracking-widest uppercase">2 Exercises Remaining</span>
+</div>
+<div class="relative group">
+<div class="bg-surface-container-low rounded-lg p-4 flex items-center justify-between border border-white/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-DEFAULT bg-surface-container-highest overflow-hidden grayscale">
+<img alt="Plank" class="w-full h-full object-cover opacity-60" data-alt="Athletic person performing a plank exercise on a dark mat, minimalist gym setting, moody low key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmXRBNtVpDmZR2UDbWMWlHzYaD3WKWRP6u6l_A-yHIdCPUu0-9Gl2OTrG6z0Ff8FTh_7DWs-3jeOI4lIg0mhCVXhxuaUf3ZX_V_4Y2K-0x4aoGwNiILRIZJZs-Co65eWoSdfW1MJareK255qu6hPRUmDFiOPwge_BsY3bTBSt8npIAlWHoT7OcYxuahOHY_8cZ7ReuJqIkfMuJLaERX4wS6QOSKIwxdBKskfXhHOvac_Lb_0hW1SEjfZONXXQiHYJ7nBgCNCCHATk"/>
+</div>
+<div>
+<h4 class="font-headline text-white font-bold text-sm">Forearm Plank</h4>
+<p class="text-xs text-on-surface-variant font-medium">01:00 Minute Hold</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="drag_handle">drag_handle</span>
+</div>
+</div>
+</div>
+<!-- Controls Floating Glass Dock -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 w-[90%] max-w-xs z-50">
+<div class="bg-white/10 glass-blur rounded-full border border-white/20 p-2 flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+<!-- Skip Previous -->
+<button class="w-12 h-12 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-all active:scale-90">
+<span class="material-symbols-outlined text-3xl" data-icon="skip_previous">skip_previous</span>
+</button>
+<!-- Play/Pause Primary -->
+<button class="w-16 h-16 flex items-center justify-center rounded-full bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform hover:scale-105 active:scale-95">
+<span class="material-symbols-outlined text-4xl" data-icon="pause" style="font-variation-settings: 'FILL' 1;">pause</span>
+</button>
+<!-- Skip Next -->
+<button class="w-12 h-12 flex items-center justify-center rounded-full text-white/70 hover:text-white transition-all active:scale-90">
+<span class="material-symbols-outlined text-3xl" data-icon="skip_next">skip_next</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Filtered for Content Canvas Priority but maintained as per Shell Rules) -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md rounded-full bg-white/10 backdrop-blur-2xl border border-white/20 flex justify-around items-center px-4 py-2 z-50 shadow-[0_8px_32px_0_rgba(255,255,255,0.08)]">
+<a class="flex items-center justify-center text-[#C6C6C6] p-3 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</a>
+<a class="flex items-center justify-center bg-white text-black rounded-full p-3 scale-110 shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+</a>
+<a class="flex items-center justify-center text-[#C6C6C6] p-3 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</nav>
+</body></html>

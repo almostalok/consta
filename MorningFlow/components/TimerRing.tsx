@@ -18,12 +18,12 @@ interface TimerRingProps {
 export default function TimerRing({ 
   progress, 
   radius = 60, 
-  strokeWidth = 10, 
+  strokeWidth = 8, // reduced width for elegance
   color,
   label
 }: TimerRingProps) {
   const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  const theme = Colors[colorScheme ?? 'dark']; // Enforce dark
   
   const ringColor = color || theme.primary;
   const circumference = 2 * Math.PI * radius;
@@ -59,6 +59,7 @@ export default function TimerRing({
           fill="transparent"
           stroke={theme.border}
           strokeWidth={strokeWidth}
+          opacity={0.3} // Ghost Border aesthetic
         />
         <AnimatedCircle
           cx="50%"
@@ -93,12 +94,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   progressText: {
+    fontFamily: 'Manrope_700Bold',
     fontSize: 28,
-    fontWeight: 'bold',
+    letterSpacing: -1,
   },
   labelText: {
-    fontSize: 12,
+    fontFamily: 'Inter_500Medium',
+    fontSize: 10,
     marginTop: 2,
-    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
   }
 });

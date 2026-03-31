@@ -8,6 +8,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import TimerRing from '@/components/TimerRing';
 import ModuleCard from '@/components/ModuleCard';
 import { Flame } from 'lucide-react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const MODULES = [
   { id: 'workout', title: 'Workout', icon: '💪', duration: 10, route: '/workout' },
@@ -20,7 +21,7 @@ const MODULES = [
 export default function HomeDashboard() {
   const router = useRouter();
   const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  const theme = Colors[colorScheme ?? 'dark']; // Enforce dark
   
   const { userName, progress, streak, refresh, loading } = useRoutineStore();
 
@@ -54,44 +55,51 @@ export default function HomeDashboard() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         
         {/* Header Section */}
-        <View style={styles.header}>
-          <View>
+        <Animated.View entering={FadeInDown.duration(600)} style={styles.header}>
+          <View style={styles.headerTextContainer}>
             <Text style={[styles.date, { color: theme.textSecondary }]}>{getFormattedGreetingDate()}</Text>
-            <Text style={[styles.greeting, { color: theme.text }]}>
-              Hi{userName ? ` ${userName}` : ''}!
+            <Text style={[styles.greeting, { color: theme.primary }]}>
+              Hi{userName ? ` ${userName}` : ''}.
             </Text>
           </View>
-          <View style={[styles.streakBadge, { backgroundColor: theme.surface }]}>
-            <Flame size={16} color={theme.primary} />
+          <View style={[styles.streakBadge, { backgroundColor: theme.surfaceContainer, borderColor: theme.border }]}>
+            <Flame size={16} color={theme.text} />
             <Text style={[styles.streakText, { color: theme.text }]}>{streak}</Text>
           </View>
-        </View>
+        </Animated.View>
 
         {/* Progress Section */}
-        <View style={styles.progressSection}>
-          <TimerRing progress={totalProgress} label="Completed" color={theme.primary} />
-          {totalProgress === 100 && (
-            <Text style={[styles.celebrationText, { color: theme.success }]}>
-              Amazing! You conquered the morning! 🎉
-            </Text>
-          )}
-        </View>
+        <Animated.View entering={FadeInDown.delay(200).duration(600)} style={styles.progressSection}>
+          <View style={[styles.progressCard, { backgroundColor: theme.surfaceLow }]}>
+            <View style={styles.progressTextContainer}>
+               <Text style={[styles.progressTitle, { color: theme.primary }]}>Your Daily Flow</Text>
+               <Text style={[styles.progressDesc, { color: theme.textSecondary }]}>
+                 {totalProgress === 100 
+                   ? "You’ve conquered the morning."
+                   : "Consistency creates prestige."}
+               </Text>
+            </View>
+            <TimerRing progress={totalProgress} label="Done" color={theme.primary} />
+          </View>
+        </Animated.View>
 
         {/* Modules Grid */}
         <View style={styles.modulesSection}>
-          <Text style={[styles.sectionTitle, { color: theme.text }]}>Today's Flow</Text>
-          {MODULES.map((mod, index) => (
-            <ModuleCard
-              key={mod.id}
-              title={mod.title}
-              icon={mod.icon}
-              duration={mod.duration}
-              // @ts-ignore
-              completed={progress[mod.id]}
-              onPress={() => handleModulePress(mod.route)}
-              index={index}
-            />
-          ))}
+          <Text style={[styles.sectionTitle, { color: theme.text }]}>Today's Routine</Text>
+          <View style={{ gap: SIZES.padding / 2 }}>
+            {MODULES.map((mod, index) => (
+              <ModuleCard
+                key={mod.id}
+                title={mod.title}
+                icon={mod.icon}
+                duration={mod.duration}
+                // @ts-ignore
+                completed={progress[mod.id]}
+                onPress={() => handleModulePress(mod.route)}
+                index={index}
+              />
+            ))}
+          </View>
         </View>
 
       </ScrollView>
@@ -105,56 +113,75 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: SIZES.padding,
-    paddingBottom: 100, // accommodate sticky bottom tabs
+    paddingBottom: 120, // accommodate sticky bottom tabs
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: 20,
-    marginBottom: 30,
+    marginBottom: 40, // Increased whitespace
+  },
+  headerTextContainer: {
+    paddingRight: 10,
   },
   date: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
+    fontSize: SIZES.labelMd,
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 4,
+    letterSpacing: 1.5,
+    marginBottom: 8,
   },
   greeting: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: 'Manrope_600SemiBold',
+    fontSize: SIZES.headlineLg,
+    letterSpacing: -1,
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
+    borderRadius: SIZES.radiusLg,
+    borderWidth: 1, // Ghost border
   },
   streakText: {
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Manrope_700Bold',
+    fontSize: SIZES.labelMd,
     marginLeft: 6,
+    letterSpacing: 1,
   },
   progressSection: {
+    marginBottom: 48, // Generous whitespace
+  },
+  progressCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 40,
+    padding: SIZES.padding,
+    borderRadius: SIZES.radiusLg, // surface_lowest context
   },
-  celebrationText: {
-    marginTop: 16,
-    fontSize: 14,
-    fontWeight: '600',
+  progressTextContainer: {
+    flex: 1,
+    paddingRight: 20,
   },
-  modulesSection: {},
-  sectionTitle: {
+  progressTitle: {
+    fontFamily: 'Manrope_600SemiBold',
     fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 8,
+    letterSpacing: -0.5,
+  },
+  progressDesc: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: SIZES.labelMd,
+    lineHeight: 18,
+  },
+  modulesSection: {
+  },
+  sectionTitle: {
+    fontFamily: 'Manrope_600SemiBold',
+    fontSize: SIZES.headlineLg,
+    marginBottom: 24, // Separation of Space
+    letterSpacing: -1,
   }
 });

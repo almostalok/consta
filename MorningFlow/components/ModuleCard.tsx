@@ -16,14 +16,14 @@ interface ModuleCardProps {
 
 export default function ModuleCard({ title, icon, duration, completed, onPress, index }: ModuleCardProps) {
   const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? 'light'];
+  const theme = Colors[colorScheme ?? 'dark']; // Enforce dark
 
   return (
     <Animated.View entering={FadeInUp.delay(index * 100).duration(500)} style={styles.wrapper}>
       <TouchableOpacity 
-        style={[styles.card, { backgroundColor: theme.surface }]}
+        style={[styles.card, { backgroundColor: theme.surfaceContainer }]}
         onPress={onPress}
-        activeOpacity={0.7}
+        activeOpacity={0.8}
       >
         <View style={styles.leftContent}>
           <Text style={styles.icon}>{icon}</Text>
@@ -31,15 +31,17 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
             <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
             <View style={styles.durationContainer}>
               <Clock size={12} color={theme.textSecondary} />
-              <Text style={[styles.durationText, { color: theme.textSecondary }]}>{duration} min</Text>
+              <Text style={[styles.durationText, { color: theme.textSecondary }]}>
+                {String(duration).padStart(2, '0')}:00
+              </Text>
             </View>
           </View>
         </View>
         <View style={styles.rightContent}>
           {completed ? (
-            <CheckCircle2 size={24} color={theme.success} />
+            <CheckCircle2 size={24} color={theme.primary} />
           ) : (
-            <View style={[styles.uncompletedCircle, { borderColor: theme.border }]} />
+             <View style={[styles.uncompletedCircle, { borderColor: theme.border }]} />
           )}
         </View>
       </TouchableOpacity>
@@ -49,19 +51,15 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 12,
+    marginBottom: 0, // Using gap from parent
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: SIZES.padding,
-    borderRadius: SIZES.radius,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    borderRadius: SIZES.radiusLg,
+    // The "Leveling" rule: No standard drop shadows, separation by color tier.
   },
   leftContent: {
     flexDirection: 'row',
@@ -69,14 +67,15 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 28,
-    marginRight: 16,
+    marginRight: 20, // More breathing room
   },
   info: {
     justifyContent: 'center',
   },
   title: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Manrope_600SemiBold',
+    fontSize: 18,
+    letterSpacing: -0.5,
     marginBottom: 4,
   },
   durationContainer: {
@@ -84,8 +83,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   durationText: {
+    fontFamily: 'Inter_500Medium',
     fontSize: 12,
-    marginLeft: 4,
+    marginLeft: 6,
+    letterSpacing: 0.5,
   },
   rightContent: {
     paddingLeft: 10,
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 1.5,
+    opacity: 0.5, // Ghost Border
   }
 });

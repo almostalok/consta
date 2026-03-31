@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MorningFlow | Daily Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#3a3c3c",
+              "secondary": "#c7c6c6",
+              "secondary-fixed-dim": "#ababab",
+              "on-tertiary-fixed-variant": "#e2e2e2",
+              "primary-fixed": "#5d5f5f",
+              "on-primary-container": "#000000",
+              "on-surface-variant": "#c6c6c6",
+              "outline-variant": "#474747",
+              "outline": "#919191",
+              "surface-dim": "#131313",
+              "error": "#ffb4ab",
+              "primary": "#ffffff",
+              "primary-fixed-dim": "#454747",
+              "on-error-container": "#ffdad6",
+              "surface-container-lowest": "#0e0e0e",
+              "inverse-primary": "#5d5f5f",
+              "inverse-surface": "#e2e2e2",
+              "surface-bright": "#393939",
+              "on-background": "#e2e2e2",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "on-error": "#690005",
+              "on-primary": "#1a1c1c",
+              "on-surface": "#e2e2e2",
+              "surface-container-highest": "#353535",
+              "on-secondary-fixed": "#1a1c1c",
+              "primary-container": "#d4d4d4",
+              "error-container": "#93000a",
+              "surface-variant": "#353535",
+              "on-secondary-container": "#e3e2e2",
+              "inverse-on-surface": "#303030",
+              "on-primary-fixed": "#ffffff",
+              "on-tertiary": "#1b1b1b",
+              "tertiary-fixed-dim": "#474747",
+              "surface-container": "#1f1f1f",
+              "secondary-container": "#464747",
+              "surface-tint": "#c6c6c7",
+              "on-secondary": "#1a1c1c",
+              "tertiary-container": "#919191",
+              "secondary-fixed": "#c7c6c6",
+              "on-tertiary-container": "#000000",
+              "background": "#000000",
+              "surface": "#131313",
+              "surface-container-high": "#2a2a2a",
+              "tertiary-fixed": "#5e5e5e",
+              "on-tertiary-fixed": "#ffffff",
+              "surface-container-low": "#1b1b1b",
+              "tertiary": "#e2e2e2"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #000000; color: #E2E2E2; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card {
+            background: rgba(53, 53, 53, 0.4);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .text-glow { text-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313] dark:bg-[#131313] bg-gradient-to-b from-[#131313] to-transparent h-24 flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/20">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man in a black turtleneck with soft cinematic lighting against a dark studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnOvYlNBqaC_KvgGTaeEPx7k-zfXzrcIj_qmqExydHPiN4d0Cxk1a47S_krfy4SYh9m-IrKZbj7ioQmDWajkbU8BhVRUfu4FwmzHTnUbglBMEvI__DRsO9uiRcaVNyMstppHw_e_LWcz8ef_XUlKWEVMgCgJ9khUTdkAQtHQ_ISrkr3m88cC3t0pPmZHAzdxizfp9Q0oO5hlgDSRixGsNB4XJxB7Enad21FD6FYMBtPGiLMP81yqMdSry37eruThAGDgwNIb1pa1k"/>
+</div>
+<span class="text-2xl font-black tracking-tighter text-white uppercase font-headline">MorningFlow</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all active:scale-95">
+<span class="material-symbols-outlined text-white">notifications</span>
+</button>
+</div>
+</nav>
+<main class="pt-28 pb-32 px-6 max-w-5xl mx-auto space-y-12">
+<!-- Hero Section: Daily Progress Ring -->
+<section class="flex flex-col items-center justify-center space-y-8 py-8">
+<div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+<!-- Progress Track -->
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-white/10" cx="50%" cy="50%" fill="transparent" r="45%" stroke="currentColor" stroke-width="24"></circle>
+<circle class="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]" cx="50%" cy="50%" fill="transparent" r="45%" stroke="currentColor" stroke-dasharray="283%" stroke-dashoffset="70%" stroke-linecap="round" stroke-width="24"></circle>
+</svg>
+<!-- Central Percentage -->
+<div class="text-center z-10">
+<h1 class="text-7xl md:text-8xl font-black font-headline tracking-tighter text-white text-glow">75%</h1>
+<p class="text-sm font-label tracking-widest text-on-surface-variant uppercase mt-1">Daily Flow</p>
+</div>
+</div>
+<div class="text-center max-w-sm">
+<h2 class="text-2xl font-headline font-bold text-white">Stay focused, Elias.</h2>
+<p class="text-on-surface-variant body-lg mt-2">You're 25% away from your peak productivity goal today.</p>
+</div>
+</section>
+<!-- Bento Grid: Activity Cards -->
+<div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+<!-- Focus Session Card -->
+<div class="md:col-span-4 glass-card p-8 rounded-xl flex flex-col justify-between group cursor-pointer overflow-hidden relative">
+<div class="relative z-10">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-white text-3xl">timer</span>
+<span class="text-white text-sm font-label uppercase tracking-widest">Active Now</span>
+</div>
+<div class="mt-12">
+<h3 class="text-3xl font-headline font-extrabold text-white">Deep Work Session</h3>
+<p class="text-on-surface-variant mt-2 text-lg">Focusing on "UI Design System" for 45 minutes.</p>
+</div>
+</div>
+<div class="mt-8 flex items-end justify-between relative z-10">
+<button class="bg-white text-on-primary px-8 py-3 rounded-xl font-bold font-headline hover:bg-white/90 transition-all active:scale-95">Complete</button>
+<div class="flex -space-x-3">
+<div class="w-8 h-8 rounded-full border-2 border-surface-dim bg-surface-container-highest"></div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-dim bg-surface-container-high"></div>
+</div>
+</div>
+<!-- Decorative background accent -->
+<div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors"></div>
+</div>
+<!-- Health/Vitals Card -->
+<div class="md:col-span-2 glass-card p-8 rounded-xl flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-white text-3xl">favorite</span>
+<h3 class="text-xl font-headline font-bold text-white mt-6">Heart Rate</h3>
+<p class="text-4xl font-black text-white mt-2">72 <span class="text-sm font-normal text-on-surface-variant">BPM</span></p>
+</div>
+<div class="h-16 w-full flex items-end gap-1 mt-6">
+<div class="bg-white/20 w-full h-1/2 rounded-t-sm"></div>
+<div class="bg-white/20 w-full h-3/4 rounded-t-sm"></div>
+<div class="bg-white/40 w-full h-2/3 rounded-t-sm"></div>
+<div class="bg-white w-full h-full rounded-t-sm"></div>
+<div class="bg-white/60 w-full h-4/5 rounded-t-sm"></div>
+</div>
+</div>
+<!-- Hydration Card -->
+<div class="md:col-span-2 glass-card p-8 rounded-xl flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="material-symbols-outlined text-white text-3xl">water_drop</span>
+<span class="text-white font-bold">1.2L / 2L</span>
+</div>
+<div class="mt-4">
+<h3 class="font-headline font-bold text-white">Hydration</h3>
+<div class="w-full bg-white/10 h-2 rounded-full mt-4 overflow-hidden">
+<div class="bg-white h-full w-[60%]"></div>
+</div>
+</div>
+</div>
+<!-- Sleep Metrics Card -->
+<div class="md:col-span-4 glass-card p-8 rounded-xl flex items-center gap-8 relative overflow-hidden">
+<div class="w-1/3 aspect-square rounded-full border-4 border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bedtime</span>
+</div>
+<div class="flex-1">
+<h3 class="text-2xl font-headline font-extrabold text-white">Sleep Quality</h3>
+<p class="text-on-surface-variant mt-1">7h 45m · High Recovery</p>
+<div class="flex gap-2 mt-4">
+<span class="bg-white/10 text-white text-xs px-3 py-1 rounded-full font-label tracking-wider">REM 2h</span>
+<span class="bg-white/10 text-white text-xs px-3 py-1 rounded-full font-label tracking-wider">DEEP 1.5h</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Schedule Section -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<h2 class="text-3xl font-headline font-extrabold text-white">Morning Routine</h2>
+<button class="text-white font-label tracking-widest uppercase hover:underline">Edit Plan</button>
+</div>
+<div class="space-y-3">
+<!-- Task Item -->
+<div class="flex items-center justify-between p-6 bg-surface-container-low hover:bg-surface-container transition-colors rounded-xl border border-white/5 group">
+<div class="flex items-center gap-6">
+<div class="w-6 h-6 border-2 border-white/30 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
+<div class="w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div>
+<p class="text-lg font-bold text-white">Meditation &amp; Breathing</p>
+<p class="text-sm text-on-surface-variant">10:00 AM — 15 mins</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-white transition-colors">self_improvement</span>
+</div>
+<!-- Task Item -->
+<div class="flex items-center justify-between p-6 bg-surface-container-low hover:bg-surface-container transition-colors rounded-xl border border-white/5 group">
+<div class="flex items-center gap-6">
+<div class="w-6 h-6 border-2 border-white/30 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
+<div class="w-2 h-2 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div>
+<p class="text-lg font-bold text-white">Review Product Roadmap</p>
+<p class="text-sm text-on-surface-variant">10:30 AM — 45 mins</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-white transition-colors">map</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 flex justify-around items-center px-4 py-2 z-50 bg-white/10 dark:bg-white/5 backdrop-blur-2xl w-[90%] max-w-md rounded-full border border-white/20 shadow-[0_8px_32px_0_rgba(255,255,255,0.08)]">
+<!-- Active Nav Item -->
+<a class="flex items-center justify-center bg-white text-black rounded-full p-3 scale-110 shadow-[0_0_15px_rgba(255,255,255,0.4)] active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</a>
+<a class="flex items-center justify-center text-[#C6C6C6] p-3 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+</a>
+<a class="flex items-center justify-center text-[#C6C6C6] p-3 hover:text-white hover:bg-white/10 rounded-full transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</a>
+</nav>
+</body></html>
