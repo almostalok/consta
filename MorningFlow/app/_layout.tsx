@@ -37,7 +37,7 @@ export default function RootLayout() {
   // Enforce DarkTheme for Monochrome Prestige
   return (
     <ThemeProvider value={DarkTheme}>
-      <Stack>
+      <Stack screenOptions={{ animation: 'fade_from_bottom', presentation: 'transparentModal' }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>

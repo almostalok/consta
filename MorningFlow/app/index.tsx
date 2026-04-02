@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn, FadeInDown, useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing, withSequence } from 'react-native-reanimated';
@@ -19,6 +19,8 @@ export default function SplashScreen() {
   const [quote, setQuote] = useState('');
 
   const pulse = useSharedValue(1);
+  const buttonScale = useSharedValue(1);
+  const glowOpacity = useSharedValue(0.02);
 
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'dark']; // Enforce dark
@@ -28,10 +30,10 @@ export default function SplashScreen() {
     const randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
     setQuote(randomQuote);
 
-    pulse.value = withRepeat(
+    glowOpacity.value = withRepeat(
       withSequence(
-        withTiming(1.02, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) })
+        withTiming(0.06, { duration: 4000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.02, { duration: 4000, easing: Easing.inOut(Easing.ease) })
       ),
       -1,
       true
@@ -48,13 +50,25 @@ export default function SplashScreen() {
     return (completed / 5) * 100;
   };
 
-  const handleBegin = () => {
+  const handlePressIn = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    buttonScale.value = withTiming(0.96, { duration: 150, easing: Easing.out(Easing.ease) });
+  };
+
+  const handlePressOut = () => {
+    buttonScale.value = withTiming(1, { duration: 250, easing: Easing.out(Easing.ease) });
+  };
+
+  const handleBegin = () => {
     router.replace('/(tabs)/home');
   };
 
   const buttonAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: pulse.value }]
+    transform: [{ scale: buttonScale.value }],
+  }));
+
+  const glowAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: glowOpacity.value,
   }));
 
   if (loading) return null;
@@ -65,17 +79,17 @@ export default function SplashScreen() {
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       
       {/* Subtle ambient lighting in background: intentional asymmetry */}
-      <View style={styles.ambientGlow} />
+      <Animated.View style={[styles.ambientGlow, glowAnimatedStyle]} />
 
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.duration(800)} style={styles.header}>
+        <Animated.View entering={FadeInDown.duration(1000).easing(Easing.out(Easing.exp))} style={styles.header}>
           <Text style={[styles.date, { color: theme.textSecondary }]}>{getFormattedGreetingDate()}</Text>
           <Text style={[styles.greeting, { color: theme.primary }]}>
             Good Morning{userName ? `,\n${userName}` : ''}.
           </Text>
         </Animated.View>
 
-        <Animated.View entering={FadeIn.delay(800).duration(1000)} style={styles.quoteWrapper}>
+        <Animated.View entering={FadeIn.delay(600).duration(1200)} style={styles.quoteWrapper}>
           {/* Glassmorphism Quote Card using BlurView */}
           <BlurView intensity={40} tint="dark" style={styles.quoteCard}>
             <View style={styles.quoteCardInner}>
@@ -84,28 +98,30 @@ export default function SplashScreen() {
           </BlurView>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(1200).duration(800)} style={styles.progressContainer}>
+        <Animated.View entering={FadeInDown.delay(1000).duration(1000).easing(Easing.out(Easing.exp))} style={styles.progressContainer}>
           <View style={[styles.progressCircle, { borderColor: theme.surfaceContainer }]}>
             <Text style={[styles.progressText, { color: theme.text }]}>{percent}%</Text>
             <Text style={[styles.progressLabel, { color: theme.textSecondary }]}>Completed</Text>
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(1600).duration(800)} style={[styles.buttonContainer, buttonAnimatedStyle]}>
-          <TouchableOpacity 
-            style={styles.beginButton} 
-            onPress={handleBegin} 
-            activeOpacity={0.9}
+        <Animated.View entering={FadeInDown.delay(1400).duration(1000).easing(Easing.out(Easing.exp))} style={styles.buttonContainer}>
+          <Pressable 
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            onPress={handleBegin}
           >
-            <LinearGradient
-               colors={['#FFFFFF', '#D4D4D4']}
-               style={styles.buttonGradient}
-               start={{x: 0, y: 0}}
-               end={{x: 0, y: 1}}
-            >
-              <Text style={styles.beginButtonText}>Let's Begin</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            <Animated.View style={[styles.beginButton, buttonAnimatedStyle]}>
+              <LinearGradient
+                 colors={['#FFFFFF', '#D4D4D4']}
+                 style={styles.buttonGradient}
+                 start={{x: 0, y: 0}}
+                 end={{x: 0, y: 1}}
+              >
+                <Text style={styles.beginButtonText}>Let's Begin</Text>
+              </LinearGradient>
+            </Animated.View>
+          </Pressable>
         </Animated.View>
       </View>
     </View>

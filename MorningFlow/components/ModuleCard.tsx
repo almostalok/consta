@@ -1,9 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { Pressable, View, Text, StyleSheet } from 'react-native';
 import { Colors, SIZES } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { CheckCircle2, Clock } from 'lucide-react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
 
 interface ModuleCardProps {
   title: string;
@@ -18,40 +19,61 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'dark']; // Enforce dark
 
+  const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
+
+  const handlePressIn = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    scale.value = withTiming(0.97, { duration: 150, easing: Easing.out(Easing.ease) });
+    opacity.value = withTiming(0.9, { duration: 150 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withTiming(1, { duration: 250, easing: Easing.out(Easing.ease) });
+    opacity.value = withTiming(1, { duration: 250 });
+  };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
   return (
-    <Animated.View entering={FadeInUp.delay(index * 100).duration(500)} style={styles.wrapper}>
-      <TouchableOpacity 
-        style={[styles.card, { backgroundColor: theme.surfaceContainer }]}
+    <Animated.View entering={FadeInUp.delay(index * 150).springify().damping(18).stiffness(150)} style={styles.wrapper}>
+      <Pressable 
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
         onPress={onPress}
-        activeOpacity={0.8}
       >
-        <View style={styles.leftContent}>
-          <Text style={styles.icon}>{icon}</Text>
-          <View style={styles.info}>
-            <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
-            <View style={styles.durationContainer}>
-              <Clock size={12} color={theme.textSecondary} />
-              <Text style={[styles.durationText, { color: theme.textSecondary }]}>
-                {String(duration).padStart(2, '0')}:00
-              </Text>
+        <Animated.View style={[styles.card, { backgroundColor: theme.surfaceContainer }, animatedStyle]}>
+          <View style={styles.leftContent}>
+            <Text style={styles.icon}>{icon}</Text>
+            <View style={styles.info}>
+              <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
+              <View style={styles.durationContainer}>
+                <Clock size={12} color={theme.textSecondary} />
+                <Text style={[styles.durationText, { color: theme.textSecondary }]}>
+                  {String(duration).padStart(2, '0')}:00
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        <View style={styles.rightContent}>
-          {completed ? (
-            <CheckCircle2 size={24} color={theme.primary} />
-          ) : (
-             <View style={[styles.uncompletedCircle, { borderColor: theme.border }]} />
-          )}
-        </View>
-      </TouchableOpacity>
+          <View style={styles.rightContent}>
+            {completed ? (
+              <CheckCircle2 size={24} color={theme.primary} />
+            ) : (
+               <View style={[styles.uncompletedCircle, { borderColor: theme.border }]} />
+            )}
+          </View>
+        </Animated.View>
+      </Pressable>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 0, // Using gap from parent
+    marginBottom: 0,
   },
   card: {
     flexDirection: 'row',
@@ -59,7 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: SIZES.padding,
     borderRadius: SIZES.radiusLg,
-    // The "Leveling" rule: No standard drop shadows, separation by color tier.
   },
   leftContent: {
     flexDirection: 'row',
@@ -67,7 +88,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 28,
-    marginRight: 20, // More breathing room
+    marginRight: 20,
   },
   info: {
     justifyContent: 'center',
@@ -96,6 +117,6 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 1.5,
-    opacity: 0.5, // Ghost Border
+    opacity: 0.5,
   }
 });

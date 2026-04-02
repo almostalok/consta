@@ -8,7 +8,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import TimerRing from '@/components/TimerRing';
 import ModuleCard from '@/components/ModuleCard';
 import { Flame } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeInDown, Easing } from 'react-native-reanimated';
 
 const MODULES = [
   { id: 'workout', title: 'Workout', icon: '💪', duration: 10, route: '/workout' },
@@ -55,7 +55,7 @@ export default function HomeDashboard() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         
         {/* Header Section */}
-        <Animated.View entering={FadeInDown.duration(600)} style={styles.header}>
+        <Animated.View entering={FadeInDown.duration(800).easing(Easing.out(Easing.exp))} style={styles.header}>
           <View style={styles.headerTextContainer}>
             <Text style={[styles.date, { color: theme.textSecondary }]}>{getFormattedGreetingDate()}</Text>
             <Text style={[styles.greeting, { color: theme.primary }]}>
@@ -69,7 +69,7 @@ export default function HomeDashboard() {
         </Animated.View>
 
         {/* Progress Section */}
-        <Animated.View entering={FadeInDown.delay(200).duration(600)} style={styles.progressSection}>
+        <Animated.View entering={FadeInDown.delay(200).duration(800).easing(Easing.out(Easing.exp))} style={styles.progressSection}>
           <View style={[styles.progressCard, { backgroundColor: theme.surfaceLow }]}>
             <View style={styles.progressTextContainer}>
                <Text style={[styles.progressTitle, { color: theme.primary }]}>Your Daily Flow</Text>
@@ -84,7 +84,7 @@ export default function HomeDashboard() {
         </Animated.View>
 
         {/* Modules Grid */}
-        <View style={styles.modulesSection}>
+        <Animated.View entering={FadeInDown.delay(400).duration(800).easing(Easing.out(Easing.exp))} style={styles.modulesSection}>
           <Text style={[styles.sectionTitle, { color: theme.text }]}>Today's Routine</Text>
           <View style={{ gap: SIZES.padding / 2 }}>
             {MODULES.map((mod, index) => (
@@ -100,7 +100,7 @@ export default function HomeDashboard() {
               />
             ))}
           </View>
-        </View>
+        </Animated.View>
 
       </ScrollView>
     </SafeAreaView>
