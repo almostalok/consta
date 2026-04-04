@@ -3,19 +3,20 @@ import { Pressable, View, Text, StyleSheet } from 'react-native';
 import { Colors, SIZES } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { CheckCircle2, Clock } from 'lucide-react-native';
-import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { FadeInDown, useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 interface ModuleCardProps {
   title: string;
-  icon: string;
+  IconComponent: any;
   duration: number; // in mins
   completed: boolean;
   onPress: () => void;
   index: number;
+  isLast?: boolean;
 }
 
-export default function ModuleCard({ title, icon, duration, completed, onPress, index }: ModuleCardProps) {
+export default function ModuleCard({ title, IconComponent, duration, completed, onPress, index, isLast = false }: ModuleCardProps) {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'dark']; // Enforce dark
 
@@ -24,8 +25,8 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
 
   const handlePressIn = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    scale.value = withTiming(0.97, { duration: 150, easing: Easing.out(Easing.ease) });
-    opacity.value = withTiming(0.9, { duration: 150 });
+    scale.value = withTiming(0.98, { duration: 150, easing: Easing.out(Easing.ease) });
+    opacity.value = withTiming(0.6, { duration: 150 });
   };
 
   const handlePressOut = () => {
@@ -39,15 +40,17 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
   }));
 
   return (
-    <Animated.View entering={FadeInUp.delay(index * 150).springify().damping(18).stiffness(150)} style={styles.wrapper}>
+    <Animated.View entering={FadeInDown.delay(index * 100).duration(600).easing(Easing.out(Easing.exp))} style={styles.wrapper}>
       <Pressable 
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={onPress}
       >
-        <Animated.View style={[styles.card, { backgroundColor: theme.surfaceContainer }, animatedStyle]}>
+        <Animated.View style={[styles.card, { borderBottomColor: isLast ? 'transparent' : theme.border }, animatedStyle]}>
           <View style={styles.leftContent}>
-            <Text style={styles.icon}>{icon}</Text>
+            <View style={[styles.iconContainer, { backgroundColor: theme.surfaceLow }]}>
+                <IconComponent size={20} color={theme.text} strokeWidth={1.5} />
+            </View>
             <View style={styles.info}>
               <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
               <View style={styles.durationContainer}>
@@ -60,7 +63,7 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
           </View>
           <View style={styles.rightContent}>
             {completed ? (
-              <CheckCircle2 size={24} color={theme.primary} />
+              <CheckCircle2 size={24} color={theme.text} strokeWidth={1.5} />
             ) : (
                <View style={[styles.uncompletedCircle, { borderColor: theme.border }]} />
             )}
@@ -73,30 +76,34 @@ export default function ModuleCard({ title, icon, duration, completed, onPress, 
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 0,
+    width: '100%',
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: SIZES.padding,
-    borderRadius: SIZES.radiusLg,
+    paddingVertical: 16,
+    borderBottomWidth: 1, // Sleek list item
   },
   leftContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {
-    fontSize: 28,
-    marginRight: 20,
+  iconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: SIZES.radiusDefault,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
   },
   info: {
     justifyContent: 'center',
   },
   title: {
     fontFamily: 'Manrope_600SemiBold',
-    fontSize: 18,
-    letterSpacing: -0.5,
+    fontSize: 16,
+    letterSpacing: -0.3,
     marginBottom: 4,
   },
   durationContainer: {
@@ -117,6 +124,5 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 1.5,
-    opacity: 0.5,
   }
 });

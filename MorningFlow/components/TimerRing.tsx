@@ -18,7 +18,7 @@ interface TimerRingProps {
 export default function TimerRing({ 
   progress, 
   radius = 60, 
-  strokeWidth = 8, // reduced width for elegance
+  strokeWidth = 3, // precision thin strokes
   color,
   label
 }: TimerRingProps) {
@@ -33,8 +33,8 @@ export default function TimerRing({
 
   useEffect(() => {
     animatedProgress.value = withTiming(progress, {
-      duration: 1000,
-      easing: Easing.out(Easing.ease),
+      duration: 1200,
+      easing: Easing.out(Easing.exp),
     });
   }, [progress]);
 
@@ -59,7 +59,6 @@ export default function TimerRing({
           fill="transparent"
           stroke={theme.border}
           strokeWidth={strokeWidth}
-          opacity={0.3} // Ghost Border aesthetic
         />
         <AnimatedCircle
           cx="50%"
@@ -68,7 +67,6 @@ export default function TimerRing({
           fill="transparent"
           stroke={ringColor}
           strokeWidth={strokeWidth}
-          strokeLinecap="round"
           strokeDasharray={`${circumference} ${circumference}`}
           animatedProps={animatedProps}
           rotation="-90"
@@ -77,7 +75,7 @@ export default function TimerRing({
         />
       </Svg>
       <View style={[StyleSheet.absoluteFillObject, styles.textContainer]}>
-        <Text style={[styles.progressText, { color: theme.text }]}>{Math.round(progress)}%</Text>
+        <Text style={[styles.progressText, { color: theme.text }]}>{Math.round(progress)}<Text style={styles.percentText}>%</Text></Text>
         {label && <Text style={[styles.labelText, { color: theme.textSecondary }]}>{label}</Text>}
       </View>
     </View>
@@ -95,14 +93,18 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontFamily: 'Manrope_700Bold',
-    fontSize: 28,
+    fontSize: 24,
     letterSpacing: -1,
   },
+  percentText: {
+    fontSize: 14,
+    fontFamily: 'Manrope_600SemiBold',
+  },
   labelText: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 10,
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 8,
     marginTop: 2,
     textTransform: 'uppercase',
-    letterSpacing: 2,
+    letterSpacing: 2.5,
   }
 });
